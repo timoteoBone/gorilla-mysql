@@ -2,7 +2,8 @@ package app
 
 import (
 	"database/sql"
-	//	"log"
+	"log"
+
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -19,5 +20,13 @@ func (a *App) SetupRouter() {
 }
 
 func (a *App) getUser(rw http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok {
+		log.Fatal("No ID in the path")
+	}
 
+	//TO DO
+	//data,err:=a.Database.Query("SELECT first_name FROM USER WHERE id = ")
+	//still dont know how to show the data to the request
 }
