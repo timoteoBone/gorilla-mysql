@@ -15,7 +15,5 @@ func CreateDB() (*sql.DB, error) {
 		panic(err.Error())
 	}
 
-	//defer db.Close()
-
 	return db, nil
 }
