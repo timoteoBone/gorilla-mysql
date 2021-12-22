@@ -2,17 +2,20 @@ package db
 
 import (
 	"database/sql"
+	//"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func CreateDB() (*sql.DB, error) {
 
-	db, err := sql.Open("mysql", "root:PewDiePie8!!@tcp(127.0.0.1:3036)/test")
+	db, err := sql.Open("mysql", "root:PewDiePie8!!@tcp(127.0.0.1:3306)/test?parseTime=true")
 
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
+
+	//defer db.Close()
 
 	return db, nil
 }

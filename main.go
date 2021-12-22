@@ -20,8 +20,8 @@ func main() {
 	}
 
 	app := &app.App{
-		Router:   mux.NewRouter(),
-		Database: *db,
+		Router:   mux.NewRouter().StrictSlash(true),
+		Database: db,
 	}
 
 	app.SetupRouter()
@@ -35,4 +35,5 @@ func main() {
 	}
 
 	s.ListenAndServe()
+
 }

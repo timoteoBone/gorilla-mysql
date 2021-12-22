@@ -2,8 +2,10 @@ package app
 
 import (
 	"database/sql"
-	"log"
 
+	//"fmt"
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -11,12 +13,12 @@ import (
 
 type App struct {
 	Router   *mux.Router
-	Database sql.DB
+	Database *sql.DB
 }
 
 func (a *App) SetupRouter() {
 
-	a.Router.Methods(http.MethodGet).Path("/getUser/{id}").HandlerFunc(a.getUser)
+	a.Router.HandleFunc("/getUser/{id}", a.getUser).Methods("GET")
 }
 
 func (a *App) getUser(rw http.ResponseWriter, r *http.Request) {
@@ -26,7 +28,22 @@ func (a *App) getUser(rw http.ResponseWriter, r *http.Request) {
 		log.Fatal("No ID in the path")
 	}
 
-	//TO DO
-	//data,err:=a.Database.Query("SELECT first_name FROM USER WHERE id = ")
-	//still dont know how to show the data to the request
+	res, err := a.Database.Query("SELECT id, first_name, last_name FROM USER WHERE id = ?", id) //.Scan(&user.ID, &user.FirstName, &user.LastName)
+	if err != nil {
+		log.Fatal("db select failed")
+	}
+
+	defer res.Close()
+	var user User
+	for res.Next() {
+
+		err := res.Scan(&user.ID, &user.FirstName, &user.LastName)
+		if err != nil {
+			panic(err)
+		}
+		log.Println(user.LastName)
+	}
+
+	json.NewEncoder(rw).Encode(user)
+
 }
