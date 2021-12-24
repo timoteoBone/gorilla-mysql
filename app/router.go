@@ -35,6 +35,10 @@ func (a *App) getUser(rw http.ResponseWriter, r *http.Request) {
 
 	res, err := a.Database.Query("SELECT id, first_name, last_name FROM USER WHERE id = ?", id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			rw.WriteHeader(http.StatusNotFound)
+
+		}
 		log.Fatal("db select failed")
 	}
 
